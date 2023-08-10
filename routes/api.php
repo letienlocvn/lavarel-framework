@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProductsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth', 'verified'])->group(function() {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
-    Route::get('/dashboard', 'DashboardController@index'); 
+    Route::get('/dashboard', 'DashboardController@index');
 });
+
+Route::get('products', [ProductsController::class, 'getAllProducts']);

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductsCategories;
+use App\Http\Controllers\CategoriesController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 /*
@@ -13,65 +16,42 @@ use App\Models\User;
 |
 */
 
-Route::redirect('/home', '/admin');
 
-Route::get('/user', function () {
-    $user = new User();
-    dd($user);
+//Clients Routes
+Route::get('/', function () {
+    return '<h1 style="text-align: center;">WELCOME TO FBO</h1>';
+})->name('home');
+Route::prefix('categories')->group(function () {
+    //Get categories
+    Route::get('/', [CategoriesController::class, 'index'])->name('categories.list');
+
+    //Get detail - show form
+    Route::get('edit/{id}', [CategoriesController::class, 'getCategory'])->name('categories.edit');
+
+    //Update Category
+    Route::post('edit/{id}', [CategoriesController::class, 'updateCategory']);
+
+    Route::get('/add', [CategoriesController::class, 'addCategory'])->name('categories.add');
+
+    Route::post('/add', [CategoriesController::class, 'handleAddCategory'])->name('categories.add');
+
+    Route::delete('/delete/{id}', [CategoriesController::class, 'deletedCategory'])->name('categories.delete');
 });
 
-Route::get('/home', function () {
-    return view('home');
+//Admin
+
+Route::middleware('auth.admin')->prefix('admin')->group(function () {
+    Route::get('/', [DashboardController::class, 'index']);
+    Route::resource('products', ProductsCategories::class)->middleware('auth.admin.product');
 });
 
-//Route view
 
-Route::view('/welcome', 'welcome', ['name' => 'Taylor']);
-Route::view('/user', 'home');
+// Testing View helper
 
-//Route Parameter
-//Optional
-
-Route::get('/user/{name?}', function ($name = null) {
-    return $name;
+Route::get('/view-tutorial', function () {
+    return view('viewTutorial', [
+        'name' => 'John',
+        'showMessage' => true,
+        'items' => ['Item F1', 'Item 2', 'Item 3']
+    ]);
 });
-
-Route::get('/user/{name?}', function ($name = 'John') {
-    return $name;
-});
-
-//Regular expression constraint 
-
-Route::get('/regular/{name}', function ($name) {
-    return $name;
-})->where('name', '[A-Za-z]+');
-
-Route::get('/user/{id}/{name}', function ($id, $name) {
-    return $id . " - " . $name;
-})->where(['id' => '[0-9]+', 'name' => '[a-z]+']);
-
-//Name route
-Route::get('/user/profile', function () {
-    return "Welcome to your user profile!";
-})->name('profile');
-
-
-//Test username
-Route::get('/resource', function () {
-    return view('resource');
-});
-
-Route::post('/resource', function () {
-    return "Chúc mừng bạn đã kiếm được phương thức POST";
-});
-
-Route::get('post/{id}/comment/{commentId}', function($id, $commentId) {
-    $content = "Test validate with arguments: ";
-    $content .= "Post id: " . $id . "<br/>";
-    $content .= "Comment id ". $commentId ."<br/>";
-    return $content;
-})->where(
-    ['id' => "[0-5]", "commentId" => "[0-4]"]
-);
-
-
