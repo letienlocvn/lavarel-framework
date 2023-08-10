@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\ProductsCategories;
 use App\Http\Controllers\CategoriesController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\View;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,9 +51,10 @@ Route::middleware('auth.admin')->prefix('admin')->group(function () {
 // Testing View helper
 
 Route::get('/view-tutorial', function () {
-    return view('viewTutorial', [
-        'name' => 'John',
+    return View::make('viewTutorial', [
+        'name' => 'Le Tien Loc',
         'showMessage' => true,
         'items' => ['Item F1', 'Item 2', 'Item 3']
     ]);
 });
+
