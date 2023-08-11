@@ -58,3 +58,12 @@ Route::get('/view-tutorial', function () {
     ]);
 });
 
+// Admin Route: 
+
+Route::get('/admin/product', function () {
+    return view('admin.product', [
+        'name' => 'Admin',
+        'showMessage' => true,
+        'items' => ['Item F1', 'Item 2', 'Item 3']
+    ]);
+});

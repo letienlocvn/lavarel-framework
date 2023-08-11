@@ -33,9 +33,11 @@ class CategoriesController extends Controller
         return view('clients/categories/add');
     }
 
-    public function handleAddCategory()
+    public function handleAddCategory(Request $request)
     {
-        return redirect(route('categories.add'));
+        $allData = $request->input('category_name');
+        dd($allData);
+        // return redirect(route('categories.add'));
         // return "handle add category";
     }
 
