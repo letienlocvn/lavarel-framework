@@ -15,8 +15,8 @@ class CheckLoginAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$this->isLogin()) {
-            return redirect(route('home'));
+        if ($request->is('admin/*')) {
+            echo "<h1>Hello admin</h1>";
         }
         return $next($request);
     }

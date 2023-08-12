@@ -23,7 +23,10 @@ use Illuminate\Support\Facades\View;
 Route::get('/', function () {
     return '<h1 style="text-align: center;">WELCOME TO FBO</h1>';
 })->name('home');
-Route::prefix('categories')->group(function () {
+
+
+
+Route::middleware('auth.admin')->prefix('categories')->group(function () {
     //Get categories
     Route::get('/', [CategoriesController::class, 'index'])->name('categories.list');
 
